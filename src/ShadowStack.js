@@ -15,56 +15,62 @@ const sx = StyleSheet.create({
   },
 });
 
-const ShadowStack = ({
-  backgroundColor,
-  borderRadius,
-  children,
-  height,
-  hideShadow,
-  shadows,
-  style,
-  width,
-  ...props
-}) => {
-  const renderItem = useCallback(
-    (shadow, index) => (
-      <ShadowItem
-        backgroundColor={backgroundColor}
-        borderRadius={borderRadius}
-        height={height}
-        key={`${shadow.join("-")}${index}`}
-        opacity={hideShadow ? 0 : 1}
-        shadow={shadow}
-        width={width}
-        zIndex={index + 2}
-      />
-    ),
-    [backgroundColor, borderRadius, height, hideShadow, shadows, width]
-  );
+const ShadowStack = React.forwardRef(
+  (
+    {
+      backgroundColor,
+      borderRadius,
+      children,
+      height,
+      hideShadow,
+      shadows,
+      style,
+      width,
+      ...props
+    },
+    ref
+  ) => {
+    const renderItem = useCallback(
+      (shadow, index) => (
+        <ShadowItem
+          backgroundColor={backgroundColor}
+          borderRadius={borderRadius}
+          height={height}
+          key={`${shadow.join("-")}${index}`}
+          opacity={hideShadow ? 0 : 1}
+          shadow={shadow}
+          width={width}
+          zIndex={index + 2}
+        />
+      ),
+      [backgroundColor, borderRadius, height, hideShadow, shadows, width]
+    );
 
-  return (
-    <View
-      {...props}
-      borderRadius={borderRadius}
-      height={height}
-      needsOffscreenAlphaCompositing
-      style={[sx.container, style]}
-      width={width}
-    >
-      {shadows.map(renderItem)}
+    return (
       <View
         {...props}
         borderRadius={borderRadius}
         height={height}
-        style={sx.childrenWrapper}
+        needsOffscreenAlphaCompositing
+        ref={ref}
+        style={[sx.container, style]}
         width={width}
-        zIndex={shadows.length + 2}
       >
-        {children}
+        {shadows.map(renderItem)}
+        <View
+          {...props}
+          borderRadius={borderRadius}
+          height={height}
+          style={sx.childrenWrapper}
+          width={width}
+          zIndex={shadows.length + 2}
+        >
+          {children}
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 ShadowStack.propTypes = {
   backgroundColor: PropTypes.string,
