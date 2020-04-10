@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import ShadowItem from "./ShadowItem";
 
@@ -15,46 +15,36 @@ const sx = StyleSheet.create({
   },
 });
 
-export default class ShadowStack extends Component {
-  static propTypes = {
-    backgroundColor: PropTypes.string,
-    borderRadius: PropTypes.number,
-    children: PropTypes.node,
-    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    hideShadow: PropTypes.bool,
-    shadows: PropTypes.arrayOf(PropTypes.array).isRequired,
-    style: PropTypes.object,
-    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  };
-
-  static defaultProps = {
-    shadows: [],
-  };
-
-  renderItem = (shadow, index) => (
-    <ShadowItem
-      backgroundColor={this.props.backgroundColor}
-      borderRadius={this.props.borderRadius}
-      height={this.props.height}
-      key={`${shadow.join("-")}${index}`}
-      opacity={this.props.hideShadow ? 0 : 1}
-      shadow={shadow}
-      width={this.props.width}
-      zIndex={index + 2}
-    />
-  );
-
-  render = () => {
-    const {
+const ShadowStack = React.forwardRef(
+  (
+    {
       backgroundColor,
       borderRadius,
       children,
       height,
+      hideShadow,
       shadows,
       style,
       width,
       ...props
-    } = this.props;
+    },
+    ref
+  ) => {
+    const renderItem = useCallback(
+      (shadow, index) => (
+        <ShadowItem
+          backgroundColor={backgroundColor}
+          borderRadius={borderRadius}
+          height={height}
+          key={`${shadow.join("-")}${index}`}
+          opacity={hideShadow ? 0 : 1}
+          shadow={shadow}
+          width={width}
+          zIndex={index + 2}
+        />
+      ),
+      [backgroundColor, borderRadius, height, hideShadow, shadows, width]
+    );
 
     return (
       <View
@@ -66,7 +56,7 @@ export default class ShadowStack extends Component {
         style={[sx.container, style]}
         width={width}
       >
-        {shadows.map(this.renderItem)}
+        {shadows.map(renderItem)}
         <View
           {...props}
           borderRadius={borderRadius}
@@ -79,5 +69,22 @@ export default class ShadowStack extends Component {
         </View>
       </View>
     );
-  };
-}
+  }
+);
+
+ShadowStack.propTypes = {
+  backgroundColor: PropTypes.string,
+  borderRadius: PropTypes.number,
+  children: PropTypes.node,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  hideShadow: PropTypes.bool,
+  shadows: PropTypes.arrayOf(PropTypes.array).isRequired,
+  style: PropTypes.object,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+};
+
+ShadowStack.defaultProps = {
+  shadows: [],
+};
+
+export default ShadowStack;
