@@ -1,6 +1,6 @@
 {
   "name": "react-native-shadow-stack",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React Native component that wraps children with multiple overlapping box-shadows",
   "main": "dist",
   "repository": {
