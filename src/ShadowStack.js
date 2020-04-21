@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useCallback } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import ShadowItem from "./ShadowItem";
 
 const ShadowStack = React.forwardRef(
