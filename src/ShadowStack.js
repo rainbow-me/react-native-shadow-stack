@@ -1,19 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import ShadowItem from "./ShadowItem";
-
-const sx = StyleSheet.create({
-  childrenWrapper: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "transparent",
-    overflow: "hidden",
-  },
-  container: {
-    backgroundColor: "transparent",
-    zIndex: 1,
-  },
-});
 
 const ShadowStack = React.forwardRef(
   (
@@ -43,25 +31,27 @@ const ShadowStack = React.forwardRef(
           zIndex={index + 2}
         />
       ),
-      [backgroundColor, borderRadius, height, hideShadow, shadows, width]
+      [backgroundColor, borderRadius, height, hideShadow, width]
     );
 
     return (
       <View
         {...props}
+        backgroundColor="transparent"
         borderRadius={borderRadius}
         height={height}
-        needsOffscreenAlphaCompositing
         ref={ref}
-        style={[sx.container, style]}
+        style={style}
         width={width}
+        zIndex={1}
       >
         {shadows.map(renderItem)}
         <View
           {...props}
           borderRadius={borderRadius}
           height={height}
-          style={sx.childrenWrapper}
+          overflow="hidden"
+          style={StyleSheet.absoluteFill}
           width={width}
           zIndex={shadows.length + 2}
         >
@@ -71,6 +61,8 @@ const ShadowStack = React.forwardRef(
     );
   }
 );
+
+ShadowStack.displayName = "ShadowStack";
 
 ShadowStack.propTypes = {
   backgroundColor: PropTypes.string,

@@ -21,8 +21,9 @@ const buildShadow = (
 const ShadowItem = ({ backgroundColor, shadow, ...props }) => (
   <View
     {...props}
+    {...buildShadow(...shadow)}
     backgroundColor={backgroundColor || "#ffffff"}
-    style={[buildShadow(...shadow), StyleSheet.absoluteFill]}
+    style={StyleSheet.absoluteFill}
   />
 );
 
