@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Platform } from "react-native";
 import ShadowItem from "./ShadowItem";
 
 const ShadowStack = React.forwardRef(
@@ -14,6 +14,7 @@ const ShadowStack = React.forwardRef(
       shadows,
       style,
       width,
+      elevation = 6,
       ...props
     },
     ref
@@ -54,6 +55,7 @@ const ShadowStack = React.forwardRef(
           style={StyleSheet.absoluteFill}
           width={width}
           zIndex={shadows.length + 2}
+          elevation={elevation}
         >
           {children}
         </View>
